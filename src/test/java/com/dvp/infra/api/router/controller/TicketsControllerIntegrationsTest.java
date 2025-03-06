@@ -3,6 +3,7 @@ package com.dvp.infra.api.router.controller;
 import com.dvp.TicketsApplication;
 import com.dvp.app.TicketsService;
 import com.dvp.domain.enums.StatusEnum;
+import com.dvp.domain.port.cache.CachePortRepository;
 import com.dvp.infra.adapter.db.TicketsRepository;
 import com.dvp.infra.api.router.controller.dto.response.ticket.TicketDataDto;
 import com.dvp.infra.api.router.controller.dto.response.ticket.TicketDto;
@@ -16,9 +17,11 @@ import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
 import org.springframework.boot.autoconfigure.jdbc.DataSourceAutoConfiguration;
 import org.springframework.boot.autoconfigure.jdbc.DataSourceTransactionManagerAutoConfiguration;
 import org.springframework.boot.autoconfigure.orm.jpa.HibernateJpaAutoConfiguration;
+import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
 import org.springframework.test.context.ContextConfiguration;
+import org.springframework.test.context.TestPropertySource;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.springframework.test.context.web.WebAppConfiguration;
 import org.springframework.test.web.servlet.MockMvc;
@@ -26,6 +29,7 @@ import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.util.LinkedMultiValueMap;
 import org.springframework.util.MultiValueMap;
 import org.springframework.web.context.WebApplicationContext;
+import redis.clients.jedis.Jedis;
 
 import java.time.LocalDateTime;
 import java.util.Collections;
@@ -36,6 +40,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
 @ExtendWith(SpringExtension.class)
+@TestPropertySource(locations="classpath:application.properties")
 @ContextConfiguration(classes = { TicketsApplication.class })
 @WebAppConfiguration
 @EnableAutoConfiguration(exclude = {DataSourceAutoConfiguration.class, DataSourceTransactionManagerAutoConfiguration.class, HibernateJpaAutoConfiguration.class})
@@ -49,6 +54,9 @@ public class TicketsControllerIntegrationsTest {
 
     @MockBean
     private TicketsRepository ticketsRepository;
+
+    @MockBean
+    private CachePortRepository cachePortRepository;
 
     private MockMvc mockMvc;
 

@@ -3,11 +3,14 @@ package com.dvp.app;
 import com.dvp.app.mapper.TicketMapper;
 import com.dvp.domain.entities.Ticket;
 import com.dvp.domain.enums.StatusEnum;
+import com.dvp.domain.port.cache.CachePortRepository;
 import com.dvp.domain.port.db.TicketsPortRepository;
+import com.dvp.infra.adapter.cache.CacheRepository;
 import com.dvp.infra.api.router.controller.dto.response.ticket.TicketDto;
 import com.dvp.infra.api.router.controller.dto.response.ticket.TicketPaginationDto;
 import com.dvp.infra.api.router.controller.error.exception.TicketException;
 import com.dvp.infra.api.router.facade.TicketsFacade;
+import com.google.gson.Gson;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataAccessException;
@@ -15,7 +18,10 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
+import redis.clients.jedis.Jedis;
 
+import javax.swing.*;
+import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 import java.util.Objects;
@@ -25,6 +31,9 @@ import static com.dvp.app.ServiceConsts.*;
 @Slf4j
 @Service
 public class TicketsService implements TicketsFacade {
+
+    @Autowired
+    private CachePortRepository cachePortRepository;
 
     @Autowired
     private TicketsPortRepository ticketsPortRepository;
@@ -105,7 +114,7 @@ public class TicketsService implements TicketsFacade {
         try{
             isValidFilter(userId, status);
 
-            List<Ticket> tickets = ticketsPortRepository.getTicketByFilter(userId, status);
+            List<Ticket> tickets = getTicketsFromCacheOrRepository(userId, status);
 
             log.info(String.format(MSG_PROCESS_SERVICE, "getByFilter", "userId: ", userId));
             return TicketMapper.toTicketDto(TicketMapper.toDto(tickets), MSG_TICKET_GET_ALL);
@@ -137,5 +146,27 @@ public class TicketsService implements TicketsFacade {
         }
 
         return;
+    }
+
+    private List<Ticket> getTicketsFromCacheOrRepository(Long userId, StatusEnum status) throws TicketException {
+        List<Ticket> tickets;
+
+        String ticketCache = cachePortRepository.get(String.valueOf(userId));
+
+        boolean isCacheable = !Objects.isNull(userId) && Objects.isNull(status);
+
+        if(!Objects.isNull(ticketCache) &&
+                !ticketCache.trim().isEmpty() && isCacheable){
+            tickets = Arrays.stream(new Gson().fromJson(ticketCache, Ticket[].class)).toList();
+        } else {
+            tickets = ticketsPortRepository.getTicketByFilter(userId, status);;
+        }
+
+        if((Objects.isNull(ticketCache) || ticketCache.trim().isEmpty())
+                && isCacheable){
+            cachePortRepository.set(String.valueOf(userId), new Gson().toJson(tickets));
+        }
+
+        return tickets;
     }
 }
