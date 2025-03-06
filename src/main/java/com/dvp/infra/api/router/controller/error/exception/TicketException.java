@@ -7,7 +7,7 @@ import lombok.Setter;
 @Getter
 @Setter
 @AllArgsConstructor
-public class UserException extends Exception {
+public class TicketException extends Exception {
     private final String code;
     private final String message;
 }

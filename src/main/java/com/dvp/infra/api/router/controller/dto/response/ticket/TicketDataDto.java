@@ -1,5 +1,6 @@
-package com.dvp.infra.api.router.controller.dto.response.user;
+package com.dvp.infra.api.router.controller.dto.response.ticket;
 
+import com.dvp.domain.enums.StatusEnum;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.*;
 
@@ -10,13 +11,13 @@ import java.sql.Timestamp;
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
-public class UserDataDto {
+public class TicketDataDto {
+    @JsonProperty("ticket_id")
+    private Long ticketId;
     @JsonProperty("user_id")
     private Long userId;
-    @JsonProperty("first_name")
-    private String firstName;
-    @JsonProperty("last_name")
-    private String lastName;
+    private String description;
+    private StatusEnum status;
     @JsonProperty("create_at")
     private Timestamp createAt;
     @JsonProperty("update_at")

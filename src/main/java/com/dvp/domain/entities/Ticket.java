@@ -1,5 +1,6 @@
 package com.dvp.domain.entities;
 
+import com.dvp.domain.enums.StatusEnum;
 import lombok.*;
 import lombok.experimental.SuperBuilder;
 
@@ -11,10 +12,11 @@ import java.sql.Timestamp;
 @NoArgsConstructor
 @SuperBuilder
 @Builder
-public class User {
+public class Ticket {
+    private Long ticketId;
     private Long userId;
-    private String firstName;
-    private String lastName;
+    private String description;
+    private StatusEnum status;
     private Timestamp createAt;
     private Timestamp updateAt;
 }

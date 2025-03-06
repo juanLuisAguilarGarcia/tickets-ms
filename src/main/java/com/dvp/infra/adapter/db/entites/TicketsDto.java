@@ -1,5 +1,6 @@
 package com.dvp.infra.adapter.db.entites;
 
+import com.dvp.domain.enums.StatusEnum;
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -12,18 +13,21 @@ import java.util.List;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-@Table(name = "users", uniqueConstraints={@UniqueConstraint(columnNames = {"first_name" , "last_name"})})
-public class UsersDto {
+@Table(name = "tickets" )
+public class TicketsDto {
     @Id
     @GeneratedValue(strategy= GenerationType.AUTO)
-    @Column(name = "user_id")
+    @Column(name = "ticket_id")
+    private Long ticketId;
+
+    @Column(name = "ticket_user_id")
     private Long userId;
 
-    @Column(name = "first_name", length = 100)
-    private String firstName;
+    @Column(length = 500)
+    private String description;
 
-    @Column(name = "last_name", length = 100)
-    private String lastName;
+    @Column
+    private StatusEnum status;
 
     @Column(name = "create_at", columnDefinition="TIMESTAMP DEFAULT CURRENT_TIMESTAMP", insertable=false, updatable = false)
     private Timestamp createAt;

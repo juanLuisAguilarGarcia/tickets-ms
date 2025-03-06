@@ -11,25 +11,29 @@ public class RouterConsts {
     /**
      * Controller config
      */
-    public static final String API = "Users";
+    public static final String API = "Tickets";
     public static final String CROSS_ORIGIN = "*";
-    public static final String CONTROLLER_PATH = "/user";
+    public static final String CONTROLLER_PATH = "/ticket";
 
     /**
      * operaciones o metodos
      */
-    public static final String API_OPERATION_CREATE_USER = "Create a new user";
-    public static final String API_OPERATION_GET_USER_BY_ID = "Get user by id information";
-    public static final String API_OPERATION_UPDATE_USER = "Update user information";
-    public static final String API_OPERATION_GET_ALL_USER = "Get all users information";
+    public static final String API_OPERATION_CREATE_TICKET = "Create a new ticket";
+    public static final String API_OPERATION_GET_TICKET_BY_ID = "Get ticket by id information";
+    public static final String API_OPERATION_UPDATE_TICKET = "Update ticket information";
+    public static final String API_OPERATION_DELETE_TICKET = "Delete ticket information";
+    public static final String API_OPERATION_GET_PAGINATION_TICKTES = "Get pagination tickets information";
+    public static final String API_OPERATION_GET_FILTER_TICKTES = "Get filter tickets information";
 
     /**
      * descripcion de las operaciones o metodos
      */
-    public static final String NOTE_API_OPERATION_CREATE_USER = "In charge of create a new user.";
-    public static final String NOTE_API_OPERATION_GET_BY_ID_USER = "In charge of get user information filter by Id.";
-    public static final String NOTE_API_OPERATION_UPDATE_USER = "In charge of update user information.";
-    public static final String NOTE_API_OPERATION_GET_ALL_USER = "In charge of get all users.";
+    public static final String NOTE_API_OPERATION_CREATE_TICKET = "In charge of create a new ticket.";
+    public static final String NOTE_API_OPERATION_GET_BY_ID_TICKET = "In charge of get ticket information filter by Id.";
+    public static final String NOTE_API_OPERATION_UPDATE_TICKET = "In charge of update ticket information.";
+    public static final String NOTE_API_OPERATION_DELETE_TICKET = "In charge of delete ticket information.";
+    public static final String NOTE_API_OPERATION_GET_PAGINATION_TICKETS = "In charge of get pagination tickets.";
+    public static final String NOTE_API_OPERATION_GET_FILTER_TICKETS = "In charge of get tickets filtered by status and user.";
 
     /**
      * mensajes de respuesta de acuerdo al codigo http
@@ -43,17 +47,26 @@ public class RouterConsts {
     /**
      * params
      */
-    public static final String PARAM_USER_ID = "id";
+    public static final String PARAM_TICKET_ID = "id";
+    public static final String PARAM_TICKET_USER_ID = "user_id";
+    public static final String PARAM_TICKET_STATUS = "status";
+    public static final String PARAM_TICKET_PAGE = "page";
+    public static final String PARAM_TICKET_SIZE = "size";
 
     /**
      * swagger param
      */
-    public static final String API_PARAM_REQUEST_CREATE_USER = "Body mapped to CreateUserDto.";
-    public static final String API_PARAM_REQUEST_UPDATE_USER = "Body update mapped to CreateUserDto.";
-    public static final String API_PARAM_REQUEST_GET_USER = "Id of user.";
+    public static final String API_PARAM_REQUEST_CREATE_TICKET = "Body mapped to CreateAndUpdateTicketDto.";
+    public static final String API_PARAM_REQUEST_UPDATE_TICKET = "Body update mapped to CreateAndUpdateTicketDto.";
+    public static final String API_PARAM_REQUEST_GET_TICKET = "Id of ticket.";
+    public static final String API_PARAM_REQUEST_GET_TICKET_PAGE = "Number of page.";
+    public static final String API_PARAM_REQUEST_GET_TICKET_SIZE_PAGE = "Size of result in page.";
+    public static final String API_PARAM_REQUEST_GET_TICKET_FILTER_STATUS = "Status of ticket.";
+    public static final String API_PARAM_REQUEST_GET_TICKET_FILTER_USER_ID = "Id of user.";
 
     /**
      * messages
      */
-    public static final String MSG_PROCESS = "%s %s user: %s.";
+    public static final String MSG_PROCESS = "%s %s ticket: %s.";
+    public static final String MSG_CONFIRMATION_DELETE = "Record deleted successful.";
 }
