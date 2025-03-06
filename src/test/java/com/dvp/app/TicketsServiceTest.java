@@ -3,10 +3,12 @@ package com.dvp.app;
 import com.dvp.TicketsApplication;
 import com.dvp.domain.entities.Ticket;
 import com.dvp.domain.enums.StatusEnum;
+import com.dvp.domain.port.cache.CachePortRepository;
 import com.dvp.domain.port.db.TicketsPortRepository;
 import com.dvp.infra.api.router.controller.dto.response.ticket.TicketDto;
 import com.dvp.infra.api.router.controller.dto.response.ticket.TicketPaginationDto;
 import com.dvp.infra.api.router.controller.error.exception.TicketException;
+import com.google.gson.Gson;
 import org.junit.Test;
 import org.junit.jupiter.api.Assertions;
 import org.junit.runner.RunWith;
@@ -31,6 +33,9 @@ public class TicketsServiceTest {
 
     @MockBean
     private TicketsPortRepository ticketsPortRepository;
+
+    @MockBean
+    private CachePortRepository cachePortRepository;
 
     @Test
     public void createTicketTestWhenSuccess() throws TicketException {
@@ -128,6 +133,26 @@ public class TicketsServiceTest {
         Mockito.when(ticketsPortRepository.getTicketByFilter(any(), any())).thenReturn(Collections.singletonList(getTicket()));
 
         TicketDto response = ticketsService.getByFilter(1L, StatusEnum.ABIERTO);
+
+        Assertions.assertNotNull(response);
+        Assertions.assertEquals(response.getData().get(0).getTicketId(), getTicket().getTicketId());
+    }
+
+    @Test
+    public void getByFilterTestWhenSuccessAndCaching() throws TicketException {
+        Mockito.when(ticketsPortRepository.getTicketByFilter(any(), any())).thenReturn(Collections.singletonList(getTicket()));
+
+        TicketDto response = ticketsService.getByFilter(1L, null);
+
+        Assertions.assertNotNull(response);
+        Assertions.assertEquals(response.getData().get(0).getTicketId(), getTicket().getTicketId());
+    }
+
+    @Test
+    public void getByFilterTestWhenCacheSuccess() throws TicketException {
+        Mockito.when(cachePortRepository.get(any( ))).thenReturn(new Gson().toJson(Collections.singletonList(getTicket())));
+
+        TicketDto response = ticketsService.getByFilter(1L, null);
 
         Assertions.assertNotNull(response);
         Assertions.assertEquals(response.getData().get(0).getTicketId(), getTicket().getTicketId());
